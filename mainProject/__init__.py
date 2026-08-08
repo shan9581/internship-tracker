@@ -6,6 +6,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 
+
 #this line creates application object that everything is built around, name is the project name "mainProject" in this file
 #its saying the app is flask based and points to the name
 app = Flask(__name__)
@@ -20,3 +21,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 #db.Model allows a class to become a table
 #db.Column adds a column to a table
 db = SQLAlchemy(app)
+
+
+#routes import must be at bottom to avoid a circular import
+from mainProject import routes
