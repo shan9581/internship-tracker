@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1> My Applications </h1>
+    {% for a in applications %}
+        <p> {{ a.company_name }} </p>
+
+    {% endfor%}
+
+{% endblock%}
