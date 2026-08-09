@@ -16,6 +16,9 @@ app = Flask(__name__)
 #sqlite:///site.db tells it that it is a sqlite database located in a file named internships.db
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
+#makes key that flask uses to sign data
+# TODO: move to environment variable before deploying
+app.config['SECRET_KEY'] = 'tempkey'
 
 #db is an object that can talk to the database
 #db.Model allows a class to become a table

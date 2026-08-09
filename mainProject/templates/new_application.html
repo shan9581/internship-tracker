@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1> New Application </h1>
+    <form method="POST" action="">
+        {{form.hidden_tag()}}
+        
+        {{form.company_name.label}}
+        {{form.company_name()}}
+
+        {{form.role.label}}
+        {{form.role()}}
+
+        {{form.pay.label}}
+        {{form.pay()}}
+
+        {{form.url.label}}
+        {{form.url()}}
+
+        {{form.notes.label}}
+        {{form.notes()}}
+
+        {{form.submit()}}
+
+    </form>
+    
+    
+{% endblock%}
