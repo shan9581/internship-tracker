@@ -1,5 +1,5 @@
 from mainProject import app, db
-from flask import render_template,  url_for, redirect, request
+from flask import render_template,  url_for, redirect, request, flash
 from mainProject.models import InternshipApplication
 from mainProject.forms import ApplicationForm
 
@@ -19,6 +19,7 @@ def new_application():
 user_id=1, company_name =form.company_name.data, role = form.role.data,pay = form.pay.data, url = form.url.data, notes = form.notes.data)
         db.session.add(application)
         db.session.commit()
+        flash('Application Added!','success')
         return redirect(url_for('home'))
     return render_template('new_application.html', form=form, legend = "New Application")
 
@@ -43,6 +44,7 @@ def update_application(application_id):
         application.url = form.url.data
         application.notes = form.notes.data
         db.session.commit()
+        flash('Application Updated!','success')
         return redirect(url_for('home'))
     
     elif request.method == 'GET':
@@ -60,5 +62,7 @@ def delete_application(application_id):
     application = InternshipApplication.query.get_or_404(application_id)
     db.session.delete(application)
     db.session.commit()
+    
+    flash('Application Deleted!!','success')
     return redirect(url_for('home'))
     
