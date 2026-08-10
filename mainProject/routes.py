@@ -55,4 +55,10 @@ def update_application(application_id):
     return render_template('new_application.html', form=form, legend = "Update Application")
 
 
+@app.route("/application/<int:application_id>/delete", methods = ['POST'])
+def delete_application(application_id):
+    application = InternshipApplication.query.get_or_404(application_id)
+    db.session.delete(application)
+    db.session.commit()
+    return redirect(url_for('home'))
     

@@ -1,9 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1> My Applications </h1>
+    
     {% for a in applications %}
         <p><a href="{{ url_for('application', application_id=a.id) }}" >{{ a.company_name }} </a></p>
 
     {% endfor%}
-
+    
 {% endblock%}
