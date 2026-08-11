@@ -2,23 +2,27 @@ from mainProject import app, db, bcrypt
 from flask import render_template,  url_for, redirect, request, flash
 from mainProject.models import InternshipApplication, User
 from mainProject.forms import ApplicationForm, RegisterForm, LoginForm
-from flask_login import current_user,login_user,logout_user
+from flask_login import current_user,login_user,logout_user, login_required
 
 
 @app.route("/")
 def home():
-    applications = InternshipApplication.query.all()
+    if current_user.is_authenticated:
+        applications = InternshipApplication.query.filter_by(user_id=current_user.id).all()
+    else:
+        applications = []
     return render_template('home.html', applications=applications)
 
 #creating a new application route
 @app.route("/application/new", methods = ['GET', 'POST'])
+@login_required
 def new_application():
     form = ApplicationForm()
     if form.validate_on_submit():
 
-        #TODO user id is currently hardcoded to 1
+       
         application =InternshipApplication(
-user_id=1, company_name =form.company_name.data, role = form.role.data,pay = form.pay.data, url = form.url.data, notes = form.notes.data)
+user_id=current_user.id, company_name =form.company_name.data, role = form.role.data,pay = form.pay.data, url = form.url.data, notes = form.notes.data)
         db.session.add(application)
         db.session.commit()
         flash('Application Added!','success')
@@ -28,6 +32,7 @@ user_id=1, company_name =form.company_name.data, role = form.role.data,pay = for
 
 #detail route, viewing the details of an applicaiton
 @app.route("/application/<int:application_id>")
+@login_required
 def application(application_id):
     application = InternshipApplication.query.get_or_404(application_id)
     return render_template('application.html',application=application)
@@ -35,6 +40,7 @@ def application(application_id):
 
 #update an application route
 @app.route("/application/<int:application_id>/update", methods = ['GET', 'POST'])
+@login_required
 def update_application(application_id):
     application = InternshipApplication.query.get_or_404(application_id)
 
@@ -60,6 +66,7 @@ def update_application(application_id):
 
 
 @app.route("/application/<int:application_id>/delete", methods = ['POST'])
+@login_required
 def delete_application(application_id):
     application = InternshipApplication.query.get_or_404(application_id)
     db.session.delete(application)
