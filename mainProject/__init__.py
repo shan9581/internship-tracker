@@ -4,6 +4,8 @@
 from flask import Flask
 #sqlalchemy is a database toolkit, allows tables as python classes, and querying
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 
 
 
@@ -24,6 +26,11 @@ app.config['SECRET_KEY'] = 'tempkey'
 #db.Model allows a class to become a table
 #db.Column adds a column to a table
 db = SQLAlchemy(app)
+
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+#this line is for sending people to the login page when they are logged out and accesing a page that needs login
+login_manager.login_view = 'login'
 
 
 #routes import must be at bottom to avoid a circular import
