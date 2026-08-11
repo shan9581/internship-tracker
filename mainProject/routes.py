@@ -1,5 +1,5 @@
 from mainProject import app, db, bcrypt
-from flask import render_template,  url_for, redirect, request, flash
+from flask import render_template,  url_for, redirect, request, flash, abort
 from mainProject.models import InternshipApplication, User
 from mainProject.forms import ApplicationForm, RegisterForm, LoginForm
 from flask_login import current_user,login_user,logout_user, login_required
@@ -35,6 +35,8 @@ user_id=current_user.id, company_name =form.company_name.data, role = form.role.
 @login_required
 def application(application_id):
     application = InternshipApplication.query.get_or_404(application_id)
+    if application.user_id != current_user.id:
+        abort(403)
     return render_template('application.html',application=application)
 
 
@@ -43,7 +45,8 @@ def application(application_id):
 @login_required
 def update_application(application_id):
     application = InternshipApplication.query.get_or_404(application_id)
-
+    if application.user_id != current_user.id:
+        abort(403)
     form = ApplicationForm()
     if form.validate_on_submit():
         application.company_name =form.company_name.data
@@ -68,7 +71,10 @@ def update_application(application_id):
 @app.route("/application/<int:application_id>/delete", methods = ['POST'])
 @login_required
 def delete_application(application_id):
+    
     application = InternshipApplication.query.get_or_404(application_id)
+    if application.user_id != current_user.id:
+        abort(403)
     db.session.delete(application)
     db.session.commit()
     
