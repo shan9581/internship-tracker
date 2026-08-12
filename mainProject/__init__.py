@@ -6,6 +6,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+import os
+from flask_migrate import Migrate
 
 
 
@@ -16,16 +18,19 @@ app = Flask(__name__)
 #app has settings called config
 #SQLALCHEMY_DATABASE_URI is a setting and we are setting its value
 #sqlite:///site.db tells it that it is a sqlite database located in a file named internships.db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+database_url = os.environ.get('DATABASE_URL', 'sqlite:///internships.db')
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 
 #makes key that flask uses to sign data
-# TODO: move to environment variable before deploying
-app.config['SECRET_KEY'] = 'tempkey'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'tempkey')
 
 #db is an object that can talk to the database
 #db.Model allows a class to become a table
 #db.Column adds a column to a table
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
