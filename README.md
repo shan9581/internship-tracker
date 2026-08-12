@@ -1,9 +1,12 @@
 # Internship Tracker  
-## a web app for tracking internship applications
+a web app for tracking internship applications
 
 *Note: Hosted on a free tier - first load may take up to a minute.*
 [Live demo](https://internship-tracker-2cy6.onrender.com/)
 
+**Demo login:** `demo@example.com` / `demopass123`
+
+![Home page](screenshot.png)
 
 
 ## Features
